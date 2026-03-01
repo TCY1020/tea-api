@@ -1,7 +1,9 @@
 'use strict'
 
+const isDisableDb = process.env.DISABLE_DB === 'true'
+
 exports.sequelize = {
-  enable: true,
+  enable: !isDisableDb,
   package: 'egg-sequelize',
 }
 
