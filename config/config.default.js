@@ -28,6 +28,14 @@ module.exports = appInfo => {
     },
   }
 
+  // Cloud Run 需要服務監聽在 0.0.0.0:${PORT}
+  config.cluster = {
+    listen: {
+      port: Number(process.env.PORT || 7001),
+      hostname: process.env.EGG_SERVER_ENV === 'prod' ? '0.0.0.0' : '127.0.0.1',
+    },
+  }
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
