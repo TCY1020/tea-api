@@ -8,14 +8,12 @@ class HomeController extends Controller {
       const userList = await ctx.model.User.findAll({
         raw: true,
       })
-      console.log(userList)
     }
     ctx.body = 'hi, egg'
   }
 
   async getMultiplicationTable() {
     const { ctx } = this
-    console.log('ctx.request.body', ctx.request)
     const { number } = ctx.request.body
     let multiplicationTable = ''
     for (let i = 1; i <= number; i++) {

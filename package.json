@@ -7,6 +7,7 @@
     "declarations": true
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "egg": "^3.17.5",
     "egg-errors": "^2.3.2",
     "egg-router-group": "^1.1.0",

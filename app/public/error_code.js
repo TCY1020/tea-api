@@ -10,4 +10,6 @@ module.exports.AbstractError = {
 module.exports.RuntimeError = {
   default: { code: '05-000' },
   username_already_exists: { code: '05-001' },
+  user_not_found: { code: '05-002' },
+  invalid_password: { code: '05-003' },
 }
