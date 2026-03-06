@@ -24,12 +24,26 @@ class LoginController extends Controller {
     const { ctx } = this
     const { username, email, password } = ctx.request.body
     const hallId = 1
-    let user = await ctx.service.user.login({ username, email, password, hallId })
+    let user = await ctx.service.auth.login({ username, email, password, hallId })
     user = user.toJSON()
     delete user.password
     const token = jwt.sign({ ...user }, 'test')
     ctx.body = {
       token,
+      message: 'success',
+    }
+  }
+
+  async googleLogin() {
+    const { ctx } = this
+    const { idToken } = ctx.request.body
+    if (!idToken) {
+      throw new RuntimeError('google_id_token_required')
+    }
+
+    const result = await ctx.service.auth.googleLogin({ idToken })
+    ctx.body = {
+      token: result.token,
       message: 'success',
     }
   }

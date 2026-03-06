@@ -12,4 +12,8 @@ module.exports.RuntimeError = {
   username_already_exists: { code: '05-001' },
   user_not_found: { code: '05-002' },
   invalid_password: { code: '05-003' },
+  google_id_token_required: { code: '05-004' },
+  google_client_id_not_configured: { code: '05-005' },
+  invalid_google_id_token: { code: '05-006' },
+  google_email_not_verified: { code: '05-007' },
 }

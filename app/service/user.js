@@ -30,20 +30,6 @@ class UserService extends Service {
 
     return result
   }
-
-  async login({ username, email, password, hallId }) {
-    const { ctx } = this
-    const user = await ctx.service.user.getUser({ username, email, hallId })
-    if (!user) {
-      throw new RuntimeError('user_not_found')
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if (!isPasswordValid) {
-      throw new RuntimeError('invalid_password')
-    }
-
-    return user
-  }
 }
 
 module.exports = UserService

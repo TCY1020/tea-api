@@ -38,7 +38,9 @@ module.exports = appInfo => {
 
   // add your user config here
   const userConfig = {
-    // myAppName: 'egg',
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+    },
   }
 
   return {
