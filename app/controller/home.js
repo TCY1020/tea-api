@@ -3,12 +3,13 @@ const { Controller } = require('egg')
 class HomeController extends Controller {
   async index() {
     const { ctx } = this
-    const isDisableDb = process.env.DISABLE_DB === 'true'
-    if (!isDisableDb) {
-      const userList = await ctx.model.User.findAll({
-        raw: true,
-      })
-    }
+    console.log('ctx.state.user', ctx.state.user)
+    // const isDisableDb = process.env.DISABLE_DB === 'true'
+    // if (!isDisableDb) {
+    //   const userList = await ctx.model.User.findAll({
+    //     raw: true,
+    //   })
+    // }
     ctx.body = 'hi, egg'
   }
 

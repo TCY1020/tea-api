@@ -3,48 +3,49 @@ const Service = require('egg').Service
 const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library')
 const RuntimeError = require('../lib/error/runtime')
+const ExternalError = require('../lib/error/external')
+const AuthorizeError = require('../lib/error/authorize')
 const bcrypt = require('bcrypt')
 
 class AuthService extends Service {
-  async verifyToken({ headers }) {
+  async verifyHost({ origin }) {
     const { ctx } = this
     const clientHost = await ctx.model.ClientHost.findOne({
-      where: { host: headers.host },
+      where: { host: origin },
       raw: true,
     })
-
+    if (!clientHost) {
+      throw new RuntimeError('client_host_not_found')
+    }
 
     return clientHost
   }
 
-  async generateHostToken({ headers, ip }) {
-    const { ctx } = this
-    const clientData = await ctx.model.ClientHost.findOne({
-      where: { host: headers.host },
-      raw: true,
-    })
-    console.log('clientData', clientData)
-    const jwtToken = jwt.sign({
-      clientId: clientData.clientId,
-    }, 'test')
-    console.log('jwtToken', jwtToken)
-
-    const decoded = jwt.verify(jwtToken, 'test')
-    console.log('decoded', decoded)
-    if (!clientData) {
-      throw new Error('Client not found')
+  async verifyToken({ headers }) {
+    const token = headers.authorization
+    if (!token) {
+      throw new ExternalError('token_not_found')
     }
+    let decoded = null
+    try {
+      decoded = jwt.verify(token, 'test')
+    } catch (error) {
+      throw new AuthorizeError('invalid_token')
+    }
+
+    return decoded
   }
+
 
   async login({ username, email, password, hallId }) {
     const { ctx } = this
     const user = await ctx.service.user.getUser({ username, email, hallId })
     if (!user) {
-      throw new RuntimeError('user_not_found')
+      throw new ExternalError('user_not_found')
     }
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      throw new RuntimeError('invalid_password')
+      throw new ExternalError('invalid_password')
     }
 
     return user
